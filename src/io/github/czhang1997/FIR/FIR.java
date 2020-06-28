@@ -5,9 +5,10 @@ public class FIR {
     public static final int EMPTY = 0;
     public static final int BLACK = 1;
     public static final int WHITE = 2;
-    public static final String [] SYMBOL = {"x", "B", "W"};
+    public static final String [] SYMBOL = {" ", "B", "W"};
                                             //      0       1       2         3        4       5       6       7
     public static final int [][] DIRECTIONS = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+//    public static final int [][] ROWS = {{0, 7}, {1, 6}, {2, 5}, {3, 4}};
     private int [][] board;
 
     public FIR()
@@ -36,13 +37,36 @@ public class FIR {
         else
             return false;
     }
-    private boolean gameOver(int row, int col)
+    public boolean gameOver(int row, int col)
     {
-
-
+        int turn = board[row][col];
+        if(turn == EMPTY)
+            return false;
+        int end = 7;
+        for(int start = 0; start < DIRECTIONS.length / 2; start ++)
+        {
+            int count = 1;  // the current chess
+            count += getCountInDirection(row, col, turn, start); // direction in front of center
+            count += getCountInDirection(row, col, turn, end); // direction in the back of center
+            if(count >= 5)
+                return true;
+            end --;
+        }
         return false;
     }
-//    private int getCountInDirection(int )
+    private int getCountInDirection(int row, int col, int turn, int direction)
+    {
+        row += DIRECTIONS[direction][0];
+        col += DIRECTIONS[direction][1];
+        if(checkIfInRange(row, col))
+        {
+            if(board[row][col] == turn)
+            {
+                return 1 + getCountInDirection(row, col, turn, direction);
+            }
+        }
+        return 0;
+    }
     private boolean checkPlaceAble(int row, int col)
     {
         if(checkIfInRange(row, col) && board[row][col] == EMPTY)
