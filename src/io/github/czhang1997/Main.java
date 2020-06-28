@@ -12,43 +12,23 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("GAME --------- FIVE IN A ROW ---------- START");
-        int row = 0;
-        int col = 0;
-        int turn = FIR.BLACK;
+        int row = -1;
+        int col = -1;
         while(!fir.gameOver(row, col))
         {
+
             System.out.println("Here is the board: ");
             System.out.println(fir);
-            if(turn == FIR.BLACK)
+            System.out.print((fir.getTurn() == FIR.BLACK ? "BALCK" : "WHITE") + ": Enter the row and col to place a chess on the board: ");
+            row = scanner.nextInt();
+            col = scanner.nextInt();
+            if(!fir.placeChess(row, col))
             {
-                System.out.print("Black: Enter the row and col to place a chess on the board: ");
-                row = scanner.nextInt();
-                col = scanner.nextInt();
-                if(fir.blackPlaceChess(row, col))
-                {
-                    turn = FIR.WHITE;
-                }
-                else
-                {
-                    System.out.println("InValid location, please try again");
-                }
-            }
-            else
-            {
-                System.out.print("White: Enter the row and col to place a chess on the board: ");
-                row = scanner.nextInt();
-                col = scanner.nextInt();
-                if(fir.whitePlaceChess(row, col))
-                {
-                    turn = FIR.BLACK;
-                }
-                else
-                {
-                    System.out.println("InValid location, please try again");
-                }
+                System.out.println("InValid location, please try again");
             }
         }
-        if(turn == FIR.BLACK)
+        System.out.println(fir);
+        if(fir.getWinner() == FIR.BLACK)
         {
             System.out.println("BLACK WINS");
         }
