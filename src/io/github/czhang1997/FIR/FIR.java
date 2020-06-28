@@ -16,13 +16,15 @@ public class FIR {
     public FIR() {
         board = new int[SIZE][SIZE];
         turn = BLACK;
+        winner = -1;
     }
 
     public boolean placeChess(int row, int col) {
+        // check if the location can place a chess
         if(checkPlaceAble(row, col))
         {
-            board[row][col] = turn;
-            turn = (turn == BLACK ? WHITE : BLACK);
+            board[row][col] = turn; // place the chess
+            turn = (turn == BLACK ? WHITE : BLACK); // change the turn to the other player
             return true;
         }
         else
@@ -38,7 +40,7 @@ public class FIR {
             int count = 1;  // the current chess
             count += getCountInDirection(row, col, previousTurn, start); // direction in front of center
             count += getCountInDirection(row, col, previousTurn, end); // direction in the back of center
-            if(count >= 5){
+            if(count >= 5){ // check if in the one direction has more than 5 chess of the same type
                 winner = previousTurn;
                 return true;
             }
@@ -47,28 +49,23 @@ public class FIR {
         return false;
     }
     private int getCountInDirection(int row, int col, int value, int direction) {
+        // change the coordinate to that direction
         row += DIRECTIONS[direction][0];
         col += DIRECTIONS[direction][1];
         if(checkIfInRange(row, col))
         {
-            if(board[row][col] == value)
+            if(board[row][col] == value)    // this value is the same type then check next
             {
-                return 1 + getCountInDirection(row, col, value, direction);
+                return 1 + getCountInDirection(row, col, value, direction); // go on with that direction
             }
         }
         return 0;
     }
     private boolean checkPlaceAble(int row, int col) {
-        if(checkIfInRange(row, col) && board[row][col] == EMPTY)
-            return true;
-        return false;
+        return checkIfInRange(row, col) && board[row][col] == EMPTY;
     }
     private boolean checkIfInRange(int row, int col) {
-        if(row < 0 || row >= SIZE || col < 0 || col >= SIZE)
-        {
-            return false;
-        }
-        return true;
+        return !(row < 0 || row >= SIZE || col < 0 || col >= SIZE);
     }
     public String toString() {
         String ret = "";
